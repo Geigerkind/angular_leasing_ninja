@@ -1,0 +1,186 @@
+<mat-drawer-container class="example-container" [hasBackdrop]="true">
+  <mat-drawer #drawer mode="push">
+    <button mat-raised-button class="drawer_button" (click)="i_current_mode = false">Sales</button>
+    <button mat-raised-button class="drawer_button" (click)="i_current_mode = true">Risk management</button>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>LeasingNinja - {{current_mode}}</span>
+    </mat-toolbar>
+    <mat-tab-group *ngIf="!i_current_mode">
+      <mat-tab label="View contract">
+        <div class="inner_container">
+          <mat-form-field class="example-full-width">
+            <mat-label>Contract number</mat-label>
+            <input matInput placeholder="XXXX-XXXX-XXXX-XXXX" (input)="input_cn_change($event)">
+          </mat-form-field>
+          <button mat-raised-button color="primary" class="button_spacing" (click)="load_contract()">Load contract
+          </button>
+          <mat-divider></mat-divider>
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="Contract number">
+              <th mat-header-cell *matHeaderCellDef> Contract number</th>
+              <td mat-cell *matCellDef="let element"> {{element.number}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Customer">
+              <th mat-header-cell *matHeaderCellDef> Customer</th>
+              <td mat-cell *matCellDef="let element"> {{element.customer}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Car">
+              <th mat-header-cell *matHeaderCellDef> Car</th>
+              <td mat-cell *matCellDef="let element"> {{element.car}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Price">
+              <th mat-header-cell *matHeaderCellDef> Price</th>
+              <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Sign date">
+              <th mat-header-cell *matHeaderCellDef> Sign date</th>
+              <td mat-cell *matCellDef="let element"> {{element.sign_date}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-tab>
+      <mat-tab label="Fill out contract">
+        <div class="inner_container">
+          <mat-form-field class="input_width">
+            <mat-label>Contract number</mat-label>
+            <input matInput placeholder="XXXX-XXXX-XXXX-XXXX" (input)="input_cn_change($event)">
+          </mat-form-field>
+          <mat-form-field class="input_width">
+            <mat-label>Customer forename</mat-label>
+            <input matInput placeholder="Max" (input)="input_cfn_change($event)">
+          </mat-form-field>
+          <mat-form-field class="input_width">
+            <mat-label>Customer surname</mat-label>
+            <input matInput placeholder="Mustermann" (input)="input_csn_change($event)">
+          </mat-form-field>
+          <mat-form-field class="input_width">
+            <mat-label>Car brand</mat-label>
+            <mat-select (selectionChange)="input_car_brand_change($event)">
+              <mat-option value="Volvo">Volvo</mat-option>
+              <mat-option value="Tesla">Tesla</mat-option>
+              <mat-option value="Mercedes">Mercedes</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="input_width">
+            <mat-label>Price in euro</mat-label>
+            <input matInput type="number" placeholder="12345" (input)="input_p_change($event)">
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="submit_contract()">Submit contract</button>
+        </div>
+      </mat-tab>
+      <mat-tab label="Sign contract">
+        <div class="inner_container">
+          <mat-form-field class="example-full-width">
+            <mat-label>Contract number</mat-label>
+            <input matInput placeholder="XXXX-XXXX-XXXX-XXXX" (input)="input_cn_change($event)">
+          </mat-form-field>
+          <button mat-raised-button color="primary" class="button_spacing" (click)="sign_contract()">Sign contract
+          </button>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <mat-tab-group *ngIf="i_current_mode">
+      <mat-tab label="View contracts">
+        <div class="inner_container">
+          <button mat-raised-button color="primary" (click)="load_rm_contracts()">Load contracts</button>
+          <mat-divider></mat-divider>
+          <table mat-table [dataSource]="dataSource_rm2" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="Contract number">
+              <th mat-header-cell *matHeaderCellDef> Contract number</th>
+              <td mat-cell *matCellDef="let element"> {{element.contract_number}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Credit rating">
+              <th mat-header-cell *matHeaderCellDef> Credit rating</th>
+              <td mat-cell *matCellDef="let element"> {{element.credit_rating}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Vote result">
+              <th mat-header-cell *matHeaderCellDef> Vote result</th>
+              <td mat-cell *matCellDef="let element"> {{element.vote_result}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns_rm"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns_rm;"></tr>
+          </table>
+        </div>
+      </mat-tab>
+      <mat-tab label="View contract">
+        <div class="inner_container">
+          <mat-form-field class="example-full-width">
+            <mat-label>Contract number</mat-label>
+            <input matInput placeholder="XXXX-XXXX-XXXX-XXXX" (input)="input_cn_change($event)">
+          </mat-form-field>
+          <button mat-raised-button color="primary" class="button_spacing" (click)="load_rm_contract()">Load contract
+          </button>
+          <mat-divider></mat-divider>
+          <table mat-table [dataSource]="dataSource_rm" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="Contract number">
+              <th mat-header-cell *matHeaderCellDef> Contract number</th>
+              <td mat-cell *matCellDef="let element"> {{element.contract_number}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Credit rating">
+              <th mat-header-cell *matHeaderCellDef> Credit rating</th>
+              <td mat-cell *matCellDef="let element"> {{element.credit_rating}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Vote result">
+              <th mat-header-cell *matHeaderCellDef> Vote result</th>
+              <td mat-cell *matCellDef="let element"> {{element.vote_result}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns_rm"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns_rm;"></tr>
+          </table>
+        </div>
+      </mat-tab>
+      <mat-tab label="Check credit ranking">
+        <div class="inner_container">
+          <mat-form-field class="input_width">
+            <mat-label>Contract number</mat-label>
+            <input matInput placeholder="XXXX-XXXX-XXXX-XXXX" (input)="input_cn_change($event)">
+          </mat-form-field>
+          <mat-form-field class="input_width">
+            <mat-label>Credit rating</mat-label>
+            <input matInput type="number" placeholder="A number between 1 and 10" (input)="input_credit_rating_change($event)">
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="submit_credit_rating()">Submit credit rating</button>
+        </div>
+      </mat-tab>
+      <mat-tab label="Vote contract">
+        <div class="inner_container">
+          <mat-form-field class="input_width">
+            <mat-label>Contract number</mat-label>
+            <input matInput placeholder="XXXX-XXXX-XXXX-XXXX" (input)="input_cn_change($event)">
+          </mat-form-field>
+          <mat-form-field class="input_width">
+            <mat-label>Vote result</mat-label>
+            <mat-select (selectionChange)="input_vote_result_change($event)">
+              <mat-option value="Accepted">Accepted</mat-option>
+              <mat-option value="AcceptedWithObligations">Accepted with obligations</mat-option>
+              <mat-option value="Rejected">Rejected</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="submit_vote_result()">Submit vote result</button>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-drawer-content>
+</mat-drawer-container>
